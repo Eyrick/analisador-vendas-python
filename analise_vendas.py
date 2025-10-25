@@ -25,6 +25,20 @@ def Carregar_Dados(caminho):
 	except(Exception):
 		print(f"❌ Erro inesperado ao carregar dados: {Exception}")
 
+def Limpar_e_Transfomar(df):
+	print("\n\n---Iniciando Tratamento de dados---\n\n")
+
+	#Tratamento de Nulos
+	print("\nValores nulos por coluna (antes do tratamento):")
+	print(df.isnull().sum())
+	
+	#Tratamento de Datas 
+	df['Order Date'] = pd.to_datetime(df['Order Date'])
+	df['Ship Date'] = pd.to_datetime(df['Ship Date'])
+
+	#Feature: Coluna Mês
+	df['Mês_Perdido'] =  df['Order Date'].dt.to_period('M')
+
 
 if __name__ == "__main__":
 	dataFrame_vendas = Carregar_Dados(CAMINHO_ARQUIVO)
@@ -35,10 +49,8 @@ if __name__ == "__main__":
 		print(dataFrame_vendas.head())
 		print("Informações de tipos e nulos:")
 		print(dataFrame_vendas.info())
+
+		print(Limpar_e_Transfomar(dataFrame_vendas))
 		
 	else:
 		print("\nPrograma encerrado por falta de arquivos para leitura")
-
-
-
-	
